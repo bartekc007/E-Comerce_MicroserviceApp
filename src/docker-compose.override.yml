@@ -1,19 +1,31 @@
 version: '3.4'
 
 services:
-  catalogdb:
-    container_name: catalogdb
+  catalogdb.mongodb:
+    container_name: catalogdb.mongodb
     restart: always
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
 
-  basketdb:
-    container_name: basketdb
+  basketdb.redis:
+    container_name: basketdb.redis
     restart: always
     ports:
       - "6379:6379"
+        
+  discountdb.postgres:
+    container_name: discountdb.postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=discountdb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
 
   portainer:
     container_name: portainer
@@ -29,9 +41,9 @@ services:
     container_name: catalog.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:ConnectionString=mongodb://catalogdb:27017"
+      - "DatabaseSettings:ConnectionString=mongodb://catalogdb.mongodb:27017"
     depends_on:
-     - catalogdb
+     - catalogdb.mongodb
     ports:
       - "8000:80"
 
@@ -39,9 +51,19 @@ services:
     container_name: basket.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "CacheSettings:ConnectionString=basketdb:6379"
+      - "CacheSettings:ConnectionString=basketdb.redis:6379"
     depends_on:
-      - basketdb
+      - basketdb.redis
     ports:
       - "8001:80"
+        
+  discount.api:
+    container_name: discount.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=Server=discountdb.postgres;Port=5432;Database=discountdb;User Id=admin;Password=admin;"
+    depends_on:
+      - discountdb.postgres
+    ports:
+      - "8002:80"
 
