@@ -20,7 +20,7 @@ namespace Ordering.API.Controllers
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        [HttpGet("{userName}", Name = "GetOrder")]
+        [HttpGet("{userName}", Name = "GetOrdersByUserName")]
         [ProducesResponseType(typeof(IEnumerable<OrdersDto>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<OrdersDto>>> GetOrdersByUserName(string userName)
         {
@@ -37,7 +37,7 @@ namespace Ordering.API.Controllers
             return result;
         }
 
-        [HttpPost(Name = "UpdateOrder")]
+        [HttpPut(Name = "UpdateOrder")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
