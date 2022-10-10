@@ -8,9 +8,6 @@ var logger = LoggerFactory.Create(config =>
     config.AddConfiguration(builder.Configuration.GetSection("Logging"));
 }).CreateLogger("Program");
 
-// Add services to the container.
-builder.Services.MigrateDatabase<Program>(builder.Configuration.GetValue<string>("DatabaseSettings:ConnectionString"),
-    logger);
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -18,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.MigrateDatabase<Program>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

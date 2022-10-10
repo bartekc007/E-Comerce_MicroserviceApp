@@ -1,4 +1,4 @@
-using Discount.API.Extensions;
+using Discount.Grpc.Extensions;
 using Discount.Grpc.Repositories;
 using Discount.Grpc.Services;
 
@@ -9,10 +9,6 @@ var logger = LoggerFactory.Create(config =>
     config.AddConfiguration(builder.Configuration.GetSection("Logging"));
 }).CreateLogger("Program");
 
-// Add services to the container.
-builder.Services.MigrateDatabase<Program>(builder.Configuration.GetValue<string>("DatabaseSettings:ConnectionString"),
-    logger);
-
 // Additional configuration is required to successfully run gRPC on macOS.
 // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
 
@@ -22,6 +18,8 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
+
+app.MigrateDatabase<Program>();
 
 // Configure the HTTP request pipeline.
 if (builder.Environment.IsDevelopment())
