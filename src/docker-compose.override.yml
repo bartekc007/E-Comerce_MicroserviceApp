@@ -25,16 +25,26 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data_discount:/var/lib/postgresql/data/
 
-  orderdb.sqlserver:
-    container_name: orderdb.sqlserver
+  orderdb.postgres:
+    container_name: orderdb.postgres
     environment:
-        SA_PASSWORD: password1234567890
-        ACCEPT_EULA: "Y"
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=orderdb
     restart: always
     ports:
-      - "1433:1433"
+      - "5433:5432"
+    volumes:
+      - postgres_data_order:/var/lib/postgresql/data/
+  
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
   
   pgadmin:
     container_name: pgadmin
