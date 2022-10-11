@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Npgsql;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ordering.API.Extensions
 {
@@ -24,7 +24,7 @@ namespace Ordering.API.Extensions
 
                     logger.LogInformation("Migrated database associated with context {DbContextName}", typeof(TContext).Name);
                 }
-                catch(NpgsqlException ex)
+                catch(SqlException ex)
                 {
                     logger.LogError(ex, "An error occurred while migrating the database used on context {DbContextName}", typeof(TContext).Name);
                     if(retryForAvailability < 50)

@@ -10,11 +10,8 @@ services:
   discountdb.postgres:
     image: postgres
 
-  orderdb.postgres:
-    image: postgres
-    
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
+  orderdb.sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
     
   pgadmin:
     image: dpage/pgadmin4
@@ -55,8 +52,7 @@ services:
 volumes:
   mongo_data:
   portainer_data:
-  postgres_data_discount:
-  postgres_data_order:
+  postgres_data:
   pgadmin_data:
 
 
