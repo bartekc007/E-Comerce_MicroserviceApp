@@ -12,6 +12,9 @@ services:
 
   orderdb.sqlserver:
     image: mcr.microsoft.com/azure-sql-edge
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
     
   pgadmin:
     image: dpage/pgadmin4
@@ -54,5 +57,3 @@ volumes:
   portainer_data:
   postgres_data:
   pgadmin_data:
-
-
